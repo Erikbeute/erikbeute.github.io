@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css'
 import App from './App.tsx'
 
-import ContactPage from './pages/contactPage.tsx';
+import ContactPage from './pages/ContactPage.tsx';
 import IntroPage from './pages/IntroPage.tsx';
 
 
