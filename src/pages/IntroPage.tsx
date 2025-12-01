@@ -6,21 +6,34 @@ function IntroPage() {
 
     useEffect(() => {
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const mount = mountRef.current;
+      if (mount) {
         
-        
-        if (mountRef.current) {
-            mountRef.current.appendChild(renderer.domElement);
-        }
+        // ensure the mount container is positioned so overlay can sit above the canvas
+        mount.style.position = 'relative';
+        mount.appendChild(renderer.domElement);
+
+        // position the canvas absolutely and give it a lower z-index than the overlay
+        renderer.domElement.style.position = 'absolute';
+        renderer.domElement.style.top = '0';
+        renderer.domElement.style.left = '0';
+        renderer.domElement.style.zIndex = '0';
+      }
 
         // ---- Cube ----
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshNormalMaterial();
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
+        const boxGeometry = new THREE.BoxGeometry();
+        const edgesOnly = new THREE.EdgesGeometry(boxGeometry); 
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+
+
+        
+        const edgedCube = new THREE.LineSegments(edgesOnly, lineMaterial);
+        scene.add(edgedCube);
 
         camera.position.z = 2;
 
@@ -28,8 +41,8 @@ function IntroPage() {
     function animate() {
       requestAnimationFrame(animate);
 
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
+      edgedCube.rotation.x += 0.005;
+      edgedCube.rotation.y += 0.005;
 
       renderer.render(scene, camera);
     }
@@ -37,8 +50,8 @@ function IntroPage() {
 
     // ---- Cleanup on unmount ----
     return () => {
-      if (mountRef.current && mountRef.current.contains(renderer.domElement)) {
-        mountRef.current.removeChild(renderer.domElement);
+      if (mount && mount.contains(renderer.domElement)) {
+        mount.removeChild(renderer.domElement);
       }
       renderer.dispose();
     };
@@ -54,7 +67,24 @@ return (
         margin: 0,
         padding: 0,
       }}
-    ></div>
+    >
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center',
+          minHeight: '100vh',
+          fontSize: '30px',
+          pointerEvents: 'none',
+        }}
+      >
+        more soon
+      </div>
+    </div>
   );
 }
 
