@@ -6,10 +6,15 @@ function IntroPage() {
 
   useEffect(() => {
 
+    // Sizes
+    const sizes = {
+      width: window.innerWidth,
+      height: window.innerHeight
+    }
+
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
 
     const mount = mountRef.current;
     if (mount) {
@@ -32,18 +37,40 @@ function IntroPage() {
     const edgedCube = new THREE.LineSegments(edgesOnly, lineMaterial);
     scene.add(edgedCube);
 
+    // update window (re-)size
+    window.addEventListener('resize', () => {
+
+      sizes.width = window.innerWidth;
+      sizes.height = window.innerHeight;
+
+      camera.aspect = sizes.width / sizes.height;
+      camera.updateProjectionMatrix();
+
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    });
+
     camera.position.z = 2;
+    scene.add(camera);
 
     // ---- Animation loop ----
     function animate() {
       requestAnimationFrame(animate);
 
+      // 1. Update (Rotate)
       edgedCube.rotation.x += 0.005;
       edgedCube.rotation.y += 0.005;
 
+      // 2. Render de nieuwe staat
       renderer.render(scene, camera);
     }
     animate();
+
+    /**
+     * Renderer
+     */
+    renderer.setSize(sizes.width, sizes.height)
+
 
     // ---- Cleanup on unmount ----
     return () => {
