@@ -1,10 +1,9 @@
-/* IntroPage canvas container - isolated full-screen overlay */
 .intro-root {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 9999;
+  z-index: 9;
   overflow: hidden;
   display: block;
   pointer-events: auto;
@@ -17,13 +16,44 @@
   height: 100%;
 }
 
+.intro-container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.home-layer {
+  position: fixed;
+  inset: 0;
+  filter: blur(20px);
+  transform: scale(1.05);
+  transition: filter 0.8s ease, transform 0.8s ease;
+  pointer-events: none;
+}
+
+.home-layer.revealed {
+  filter: blur(0);
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.intro-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+}
+
+.intro-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 .intro-overlay {
   position: fixed;
-  left: 50%;
-  bottom: 2rem;
-  transform: translateX(-50%);
-  z-index: 10000;
-  color: rgba(255, 255, 255, 0.9);
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  pointer-events: none;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  z-index: 3;
 }

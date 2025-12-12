@@ -1,25 +1,24 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import HomePage from "./HomePage";
+import { MouseScroll } from "../components/ui/mouseScroll";
 import "./IntroPage.css";
+
 
 function IntroPage() {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [showHome, setShowHome] = useState(false);
+  const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
-    if (showHome) return;
+    if (revealed) return;
 
     const mount = mountRef.current;
     const canvas = canvasRef.current;
     if (!mount || !canvas) return;
 
-    console.log("[Intro] MOUNT (canvas mode)");
-
     // ---- Scene ----
     const scene = new THREE.Scene();
-
     const camera = new THREE.PerspectiveCamera(
       75,
       mount.clientWidth / mount.clientHeight,
@@ -27,7 +26,6 @@ function IntroPage() {
       1000
     );
     camera.position.z = 2;
-    scene.add(camera);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -35,42 +33,33 @@ function IntroPage() {
       alpha: true,
     });
 
-    const setRendererSize = () => {
-      const w = Math.max(1, mount.clientWidth);
-      const h = Math.max(1, mount.clientHeight);
+    const resize = () => {
+      renderer.setSize(mount.clientWidth, mount.clientHeight, false);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h;
+      camera.aspect = mount.clientWidth / mount.clientHeight;
       camera.updateProjectionMatrix();
     };
-
-    setRendererSize();
+    resize();
 
     const cube = new THREE.LineSegments(
       new THREE.EdgesGeometry(new THREE.BoxGeometry()),
-      new THREE.LineBasicMaterial({ color: 0xffffff })
+      new THREE.LineBasicMaterial({ color: 0x66D9ED }),
     );
     scene.add(cube);
 
-    // ---- Wheel handling (attached to mount only) ----
     let targetZ = 2;
-    let transitioned = false;
+    let done = false;
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      if (transitioned) return;
+      if (done) return;
       targetZ = Math.max(0.8, Math.min(2, targetZ - e.deltaY * 0.001));
     };
 
     mount.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("resize", resize);
 
-    // ---- Resize handling ----
-    const onResize = () => setRendererSize();
-    window.addEventListener("resize", onResize);
-
-    // ---- Animation ----
     let raf = 0;
-
     const animate = () => {
       raf = requestAnimationFrame(animate);
 
@@ -78,54 +67,43 @@ function IntroPage() {
       cube.rotation.y += 0.005;
 
       camera.position.z += (targetZ - camera.position.z) * 0.08;
-
       renderer.render(scene, camera);
 
-      if (!transitioned && camera.position.z <= 0.9) {
-        transitioned = true;
-
-        console.log("[Intro] TRANSITION START");
-
-        cancelAnimationFrame(raf);
-        mount.removeEventListener("wheel", onWheel);
-        window.removeEventListener("resize", onResize);
-
-        // Dispose renderer context if available
-        if (renderer && typeof renderer.dispose === "function") {
-          renderer.dispose();
-        }
-
-        setTimeout(() => setShowHome(true), 100);
+      if (!done && camera.position.z <= 0.9) {
+        done = true;
+        setRevealed(true);
       }
     };
-
     animate();
 
-    // ---- Cleanup ----
     return () => {
-      console.log("[Intro] CLEANUP (canvas mode)");
       cancelAnimationFrame(raf);
       mount.removeEventListener("wheel", onWheel);
-      window.removeEventListener("resize", onResize);
-      if (renderer && typeof renderer.dispose === "function") {
-        renderer.dispose();
-      }
+      window.removeEventListener("resize", resize);
+      renderer.dispose();
     };
-  }, [showHome]);
+  }, [revealed]);
 
   return (
-    <>
-      {!showHome && (
+    <div className="intro-container">
+      {/* Homepage always mounted */}
+      <div className={`home-layer ${revealed ? "revealed" : ""}`}>
+        <HomePage />
+      </div>
+
+      {/* Three.js intro */}
+      {!revealed && (
         <>
           <div ref={mountRef} className="intro-root">
             <canvas ref={canvasRef} className="intro-canvas" />
           </div>
-          <div className="intro-overlay">Scroll</div>
+
+          <div className="intro-overlay">
+            <MouseScroll />
+          </div>
         </>
       )}
-
-      {showHome && <HomePage />}
-    </>
+    </div>
   );
 }
 
