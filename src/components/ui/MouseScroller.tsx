@@ -1,7 +1,7 @@
-import './mouseScroll.css';
+import './MouseScroller.css';
 import React from 'react';
 
-export const MouseScroll: React.FC = () => {
+export const MouseScroller: React.FC = () => {
 	return (
 		<div className="mouse-wrap" aria-hidden="false">
 			<div className="mouse" aria-hidden="true"></div>

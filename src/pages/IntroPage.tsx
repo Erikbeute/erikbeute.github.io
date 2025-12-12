@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import HomePage from "./HomePage";
-import { MouseScroll } from "../components/ui/mouseScroll";
+import { MouseScroller } from "../components/ui/MouseScroller";
 import "./IntroPage.css";
 
 
@@ -99,7 +99,7 @@ function IntroPage() {
           </div>
 
           <div className="intro-overlay">
-            <MouseScroll />
+            <MouseScroller />
           </div>
         </>
       )}
