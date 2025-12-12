@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
         <ul className="center-menu">
           <li className="nav-item">
             <a
-              href="https://www.linkedin.com/erik-beute"
+              href="https://www.linkedin.com/in/erik-beute"
               className="nav-link"
               target="_blank"
               rel="noopener noreferrer"
