@@ -1,13 +1,12 @@
 /* Hero section with a background canvas for a small spinning cube */
 .hero {
-  min-height: 80vh;
+  min-height: 85vh;
   position: relative;
   width: 100%;
-  min-height: 50vh;
   display: flex;
-  align-items: center;
   color: #ffffff;
-  overflow: hidden;
+  overflow: visible;
+    align-items: center;     /* vertical */
 }
 
 .hero__canvas {
@@ -27,11 +26,10 @@
 }
 
 .hero-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 48px 16px;
+  align-items: center; /* vertical only */
+  margin-left: 10%;
   box-sizing: border-box;
+  float: left; 
 }
 
 .item-names {
@@ -40,28 +38,38 @@
   line-height: 1.05;
 }
 
-.item-title {
-  margin: 8px 0 0;
-  opacity: 0.9;
-}
 
-h1{
+h1, a, button {
   font-family: 'Roboto Mono', monospace;
 }
 
 @media (max-width: 640px) {
-  .dev-name { font-size: 1.5rem; }
-  .hero-container { padding: 32px 12px; }
+  .dev-name {
+    font-size: 1.5rem;
+  }
+
+  .hero-container {
+    padding: 32px 12px;
+  }
 }
 
 /* Titles with GSAP highlight */
-.hero-item { display: flex; flex-direction: column; gap: 12px; }
+.hero-item {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: left;
+}
+
 .item-title {
+  background: none; 
+  border: none; 
   position: relative;
-  overflow: hidden;
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 30px;
   cursor: pointer;
+  margin: 8px 0 0;
+  opacity: 0.9;
 }
 
 /* Clip the animated gradient to the text so the light only appears on letters */
@@ -70,7 +78,7 @@ h1{
   z-index: 2;
   display: inline-block;
   /* gradient will animate left->right */
-  background: linear-gradient(  90deg, #FFFFFFF2 0%,   #66D9EDF2 40%,   #66D9EDF2 100%);
+  background: linear-gradient(90deg, #FFFFFFF2 0%, #66D9EDF2 40%, #66D9EDF2 100%);
   background-size: 200% 100%;
   background-position: 0% 50%;
   -webkit-background-clip: text;

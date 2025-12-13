@@ -1,0 +1,67 @@
+.resume {
+  padding: 96px 16px;
+  background: #0a0a0a;
+  color: #ffffff;
+}
+
+.resume-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.resume-title {
+  font-size: 2.25rem;
+  margin-bottom: 48px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.resume-block {
+  margin-bottom: 48px;
+}
+
+.resume-block h3 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+.resume-item {
+  margin-bottom: 24px;
+}
+
+.resume-meta {
+  display: block;
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.resume-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.resume-skills li {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.resume-back {
+  all: unset;
+  cursor: pointer;
+  margin-bottom: 32px;
+  display: inline-block;
+
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.resume-back:hover {
+  opacity: 1;
+}

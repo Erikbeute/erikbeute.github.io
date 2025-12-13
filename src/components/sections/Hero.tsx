@@ -1,11 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import './Hero.css';
 import { gsap } from 'gsap';
+import { Resume } from './Resume';
+import { Projects } from './Projects';
+import { Experiments } from './Experiments';
 
 export const Hero: React.FC = () => {
     const mountRef = useRef<HTMLDivElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+    type Section = "Hero" | "Resume" | "Projects" | "Experiments";
+    const [section, setSection] = useState<Section>("Hero");
 
     useEffect(() => {
         const mount = mountRef.current;
@@ -22,8 +28,8 @@ export const Hero: React.FC = () => {
 
         // Small cube (different from other pages)
         const geometry = new THREE.BoxGeometry(0.6, 0.6, 0.6);
-        const material = new THREE.MeshBasicMaterial({ color: 0x66d9ed, wireframe: true}); 
-            const cube = new THREE.Mesh(geometry, material);
+        const material = new THREE.MeshBasicMaterial({ color: 0x66d9ed, wireframe: true });
+        const cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
 
         // Add a faint edge lines so it reads on dark/light backgrounds
@@ -104,17 +110,52 @@ export const Hero: React.FC = () => {
     }, []);
 
     return (
-        <header className="hero" ref={mountRef}>
-            <canvas ref={canvasRef} className="hero__canvas" aria-hidden="true" />
-            <div className="hero__content">
-                <div className="hero-container">
-                    <div className="hero-item">
-                        <h1 className="item-title" tabIndex={0}><span className="title-inner">Projects</span><span className="title-highlight" aria-hidden="true" /></h1>
-                        <h1 className="item-title" tabIndex={0}><span className="title-inner">Resume</span><span className="title-highlight" aria-hidden="true" /></h1>
-                        <h1 className="item-title" tabIndex={0}><span className="title-inner">Experiments</span><span className="title-highlight" aria-hidden="true" /></h1>
+        <>
+            {section === "Hero" && (
+                <header className="hero" ref={mountRef}>
+                    <canvas
+                        ref={canvasRef}
+                        className="hero__canvas"
+                        aria-hidden="true"
+                    />
+
+                    <div className="hero__content">
+                        <div className="hero-container">
+                            <div className="hero-item">
+
+                                <button
+                                    className="item-title"
+                                    onClick={() => setSection("Resume")}>
+                                    <span className="title-inner">Resume</span>
+                                </button>
+
+                                <button
+                                    className="item-title"
+                                    onClick={() => setSection("Projects")}>
+                                    <span className="title-inner">Projects</span>
+                                </button>
+
+                                <button
+                                    className="item-title"
+                                    onClick={() => setSection("Experiments")}>
+                                    <span className="title-inner">Experiments</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </header>
+                </header>
+            )}
+
+            {section === "Resume" && (
+                <Resume onBack={() => setSection("Hero")} />
+            )}
+            {section === "Projects" && (
+                <Projects onBack={() => setSection("Hero")} />
+            )}
+            {section === "Experiments" && 
+            ( <Experiments onBack = {() => setSection("Hero")} /> 
+            )}
+        </>
     );
+
 };

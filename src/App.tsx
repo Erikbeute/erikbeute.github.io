@@ -1,9 +1,20 @@
-import IntroPage from "./pages/IntroPage";
+import { Hero } from './components/sections/Hero';
+import { Projects } from './components/sections/Projects';
+import { Resume } from  './components/sections/Resume';
 
-function App() {
+const IntroPage = () => {
   return (
-    <IntroPage />
-  );
-}
+    <>
+      <Hero />
 
-export default App;
+      <Projects onBack={function (): void {
+        throw new Error('Function not implemented.');
+      } } />
+      <Resume onBack={function (): void {
+        throw new Error('Function not implemented.');
+      } } />
+    </>
+  );
+};
+
+export default IntroPage;
