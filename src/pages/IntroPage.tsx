@@ -10,6 +10,7 @@ function IntroPage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [revealed, setRevealed] = useState(false);
 
+
   useEffect(() => {
     if (revealed) return;
 
